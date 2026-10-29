@@ -1,0 +1,49 @@
+{
+  "name": "effect-agent-workspace",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "prepare": "effect-tsgo patch --oxlint && lefthook install",
+    "setup:effect": "./scripts/prepare-effect.sh",
+    "lint": "oxlint --type-aware",
+    "format": "oxfmt --write .",
+    "format:check": "oxfmt --check .",
+    "typecheck": "tsc -b tsconfig.json",
+    "test": "vitest run",
+    "test:bun": "EXPECTED_RUNTIME=bun bun run --bun vitest run",
+    "test:deno": "deno task test",
+    "check": "pnpm lint && pnpm format:check && pnpm typecheck && pnpm jsdocs --check && pnpm test",
+    "build": "node scripts/build.mjs",
+    "check:packages": "pnpm build && node scripts/check-packages.mjs",
+    "jsdocs": "node packages/tools/jsdocs/src/bin.ts",
+    "docs:build": "node packages/tools/jsdocs/src/docgen.mjs",
+    "changeset": "changeset",
+    "changeset-version": "changeset version && pnpm install --lockfile-only",
+    "changeset-publish": "pnpm check:packages && changeset publish --tag staging",
+    "promote": "node scripts/npm-promote.mjs"
+  },
+  "devDependencies": {
+    "@arethetypeswrong/cli": "0.18.5",
+    "@babel/cli": "8.0.6",
+    "@babel/core": "8.0.9",
+    "@changesets/changelog-github": "1.0.1",
+    "@changesets/cli": "3.0.3",
+    "@effect/tsgo": "0.63.0",
+    "@effect/vitest": "catalog:",
+    "@types/node": "catalog:",
+    "babel-plugin-annotate-pure-calls": "0.5.0",
+    "effect": "catalog:",
+    "lefthook": "2.2.2",
+    "oxfmt": "0.75.0",
+    "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "pkg-pr-new": "0.0.92",
+    "publint": "0.3.25",
+    "typescript": "7.0.2",
+    "vitest": "catalog:"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@12.16.1"
+}

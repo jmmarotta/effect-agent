@@ -1,0 +1,10 @@
+.repos/
+.ignore
+.artifacts
+.tmp/
+node_modules/
+dist/
+*.tsbuildinfo
+.data/
+docs/
+coverage/

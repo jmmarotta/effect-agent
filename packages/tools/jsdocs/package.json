@@ -1,0 +1,17 @@
+{
+  "name": "@effect-agent/jsdocs",
+  "private": true,
+  "type": "module",
+  "exports": { ".": "./src/Jsdocs.ts" },
+  "dependencies": {
+    "effect": "catalog:",
+    "@effect/docgen": "catalog:",
+    "glob": "13.0.6",
+    "typescript": "6.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@effect/vitest": "catalog:",
+    "vitest": "catalog:"
+  }
+}

@@ -1,0 +1,42 @@
+name: npm promote
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      dry-run:
+        description: Verify registry readiness without changing tags
+        type: boolean
+        default: true
+permissions: {}
+concurrency:
+  group: npm-promote
+  cancel-in-progress: false
+jobs:
+  promote:
+    if: vars.RELEASE_ENABLED == 'true' && vars.NPM_PROMOTE_PAUSED != 'true' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    environment: npm-promote
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Install npm with OIDC dist-tag support
+        run: npm install --global npm@11.21.0
+      - name: Promote complete release
+        env:
+          DRY_RUN: ${{ inputs.dry-run }}
+        run: |
+          args=()
+          if [[ "$DRY_RUN" == 'true' ]]; then args+=(--dry-run); fi
+          pnpm promote "${args[@]}"

@@ -1,0 +1,46 @@
+{
+  "name": "@jmmarotta/effect-agent",
+  "version": "0.0.0",
+  "description": "Composable agent primitives for Effect",
+  "homepage": "https://github.com/jmmarotta/effect-agent",
+  "bugs": {
+    "url": "https://github.com/jmmarotta/effect-agent/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jmmarotta/effect-agent.git",
+    "directory": "packages/effect-agent"
+  },
+  "files": [
+    "src/**/*.ts",
+    "dist/**/*.js",
+    "dist/**/*.js.map",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./package.json": "./package.json",
+    ".": "./src/index.ts",
+    "./internal/*": null
+  },
+  "publishConfig": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./dist/index.js",
+      "./internal/*": null
+    },
+    "access": "public",
+    "provenance": true
+  },
+  "devDependencies": {
+    "effect": "catalog:"
+  },
+  "peerDependencies": {
+    "effect": "^4.0.0-beta.107"
+  },
+  "engines": {
+    "node": ">=24"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "files": [],
+  "references": [
+    { "path": "./packages/effect-agent" },
+    { "path": "./tsconfig.test.json" },
+    { "path": "./packages/tools/jsdocs" },
+    { "path": "./packages/tools/oxc" }
+  ]
+}

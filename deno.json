@@ -1,0 +1,6 @@
+{
+  "nodeModulesDir": "manual",
+  "tasks": {
+    "test": "EXPECTED_RUNTIME=deno deno run -A --node-modules-dir=manual npm:vitest@4.1.12 run"
+  }
+}

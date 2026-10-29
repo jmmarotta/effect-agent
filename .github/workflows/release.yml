@@ -1,0 +1,34 @@
+name: Release
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions: {}
+concurrency:
+  group: release
+  cancel-in-progress: false
+jobs:
+  release:
+    if: vars.RELEASE_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/setup
+      - name: Require configured repository metadata
+        run: node scripts/check-release.mjs
+      - run: pnpm check
+      - name: Install npm with trusted publishing support
+        run: npm install --global npm@11.21.0
+      - name: Create release PR or publish staged release
+        uses: changesets/action@d0ee272882939fa35f22d979828acb7e61e0bd47 # v2.0.0-next.4
+        with:
+          version-script: pnpm changeset-version
+          publish-script: pnpm changeset-publish
+          github-token: ${{ secrets.GITHUB_TOKEN }}

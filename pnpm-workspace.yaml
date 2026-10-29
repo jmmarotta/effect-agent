@@ -1,0 +1,38 @@
+packages:
+  - packages/*
+  - packages/tools/*
+
+verifyDepsBeforeRun: error
+enableGlobalVirtualStore: false
+minimumReleaseAge: 1440
+allowBuilds:
+  "*": false
+  lefthook: true
+  esbuild: false
+  msgpackr-extract: false
+
+# Babel 8.0.10 was published 2026-10-29, inside the one-day install window.
+# Revisit these pins on the next manual Babel update.
+overrides:
+  "@babel/generator": 8.0.6
+  "@babel/helpers": 8.0.8
+  "@babel/parser": 8.0.8
+  "@babel/traverse": 8.0.7
+  "@babel/types": 8.0.8
+  # Docgen's prerelease ranges otherwise resolve newer stable platform packages.
+  # Keep its runtime on the same Effect beta as the workspace.
+  "@effect/platform-node": 4.0.0-beta.107
+  "@effect/platform-node-shared": 4.0.0-beta.107
+
+# These upstream tools work with newer APIs but publish conservative peer ranges.
+peerDependencyRules:
+  allowedVersions:
+    "babel-plugin-annotate-pure-calls>@babel/core": "8"
+    "tsconfck>typescript": "6"
+
+catalog:
+  effect: 4.0.0-beta.107
+  "@effect/vitest": 4.0.0-beta.107
+  "@effect/docgen": 4.0.0-beta.107
+  "@types/node": 26.6.5
+  vitest: 4.1.12

@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.base.json",
+  "include": ["vitest.config.ts", "packages/*/test/**/*.ts", "packages/tools/*/test/**/*.ts"],
+  "compilerOptions": {
+    "rootDir": ".",
+    "outDir": ".tmp/types",
+    "types": ["node"]
+  },
+  "references": [
+    { "path": "./packages/effect-agent" },
+    { "path": "./packages/tools/jsdocs" },
+    { "path": "./packages/tools/oxc" }
+  ]
+}

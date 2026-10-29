@@ -1,0 +1,33 @@
+{
+  "extends": ["./node_modules/@effect/tsgo/oxlint-presets/recommended.json", "./packages/tools/oxc/oxlintrc.json"],
+  "jsPlugins": ["./packages/tools/oxc/src/oxlint/index.ts"],
+  "ignorePatterns": [".repos/**", ".artifacts/**", ".tmp/**", "**/dist/**", "docs/**", "node_modules/**"],
+  "overrides": [
+    {
+      "files": ["packages/tools/**"],
+      "rules": {
+        "typescript/no-unsafe-type-assertion": "off",
+        "typescript/no-unnecessary-type-assertion": "off",
+        "typescript/no-unsafe-enum-assignment": "off",
+        "typescript/unbound-method": "off",
+        "typescript/no-implied-eval": "off"
+      }
+    },
+    {
+      "files": ["scripts/**"],
+      "rules": { "effect/no-js-extension-imports": "off" }
+    },
+    {
+      "files": ["**/test/**", "scripts/**"],
+      "rules": {
+        "effect/no-import-from-barrel-package": "off",
+        "effect/no-bigint-literals": "off",
+        "eslint/no-console": "off"
+      }
+    },
+    {
+      "files": ["packages/effect-agent/src/index.ts"],
+      "rules": { "unicorn/no-empty-file": "off" }
+    }
+  ]
+}

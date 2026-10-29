@@ -1,0 +1,74 @@
+name: Check
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  static:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: ./.github/actions/setup
+      - run: pnpm lint
+      - run: pnpm format:check
+      - run: pnpm jsdocs --check
+      - run: pnpm docs:build
+  types:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: ./.github/actions/setup
+      - run: pnpm typecheck
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: ./.github/actions/setup
+      - run: pnpm check:packages
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runtime: Node 24
+            node: 24
+            command: pnpm test
+            package-runtime: node
+          - runtime: Node 26
+            node: 26.13.0
+            command: pnpm test
+            package-runtime: node
+          - runtime: Bun
+            node: 26.13.0
+            bun: 1.4.4
+            command: pnpm test:bun
+            package-runtime: bun
+          - runtime: Deno
+            node: 26.13.0
+            deno: v2.9.6
+            command: pnpm test:deno
+            package-runtime: deno
+    name: Test (${{ matrix.runtime }})
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+      - uses: ./.github/actions/setup
+        with:
+          node-version: ${{ matrix.node }}
+          bun-version: ${{ matrix.bun || '' }}
+          deno-version: ${{ matrix.deno || '' }}
+      - run: ${{ matrix.command }}
+      - run: pnpm build
+      - name: Verify packed runtime imports
+        run: node scripts/check-packages.mjs ${{ matrix.package-runtime }}
